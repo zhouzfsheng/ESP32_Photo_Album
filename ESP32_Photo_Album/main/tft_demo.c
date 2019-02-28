@@ -520,9 +520,6 @@ void file_display()
 
 	fclose(f);
 
-	// while(1) {
-	// 	vTaskDelay(1000);
-	// }
 }
 
 //void http_get_task(void *pvParameters)
@@ -649,63 +646,8 @@ void http_get_task(void)
 			vTaskDelay(5000);
 		}
 
-		// if (write(s, REQUEST, strlen(REQUEST)) < 0) {
-		// 	ESP_LOGE(TAG, "... socket send failed");
-		// 	close(s);
-		// 	vTaskDelay(4000 / portTICK_PERIOD_MS);
-		// 	continue;
-		// }
-		// ESP_LOGI(TAG, "... socket send success");
-
-		// struct timeval receiving_timeout;
-		// receiving_timeout.tv_sec = 5;
-		// receiving_timeout.tv_usec = 0;
-		// if (setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
-		// 		sizeof(receiving_timeout)) < 0) {
-		// 	ESP_LOGE(TAG, "... failed to set socket receiving timeout");
-		// 	close(s);
-		// 	vTaskDelay(4000 / portTICK_PERIOD_MS);
-		// 	continue;
-		// }
-		// ESP_LOGI(TAG, "... set socket receiving timeout success");
-
-		// ESP_LOGI(TAG, "Opening file");
-
-		// remove("/spiflash/pig.bin");
-		// FILE *f = fopen("/spiflash/pig.bin", "wb");
-		// if (f == NULL) {
-		// 	ESP_LOGE(TAG, "Failed to open file for writing");
-		// 	return;
-		// }
-
-		// // Read HTTP response
-		// do {
-		// 	bzero(recv_buf, sizeof(recv_buf));
-		// 	r = read(s, recv_buf, sizeof(recv_buf)-1);
-		// 	if(r!=-1)
-		// 	{
-		// 		sprintf(tft_buf,"length:%d...",packet_length);
-		// 		fseek(f,packet_length, 0);
-		// 		fwrite(recv_buf,sizeof(char),r,f);
-		// 		packet_length = packet_length + r;
-		// 		if(packet_length == 61440)
-		// 		{
-		// 			break;
-		// 		}
-		// 	}
-		// } while(r > 0);
-	
-		// fclose(f);
-
 		ESP_LOGI(TAG, "... done reading from socket. Last read return=%d errno=%d\r\n", r, errno);
 		close(s);
-
-		// while(packet_length >= 61440)
-		// {
-		// 	file_display();
-		// 	//lcd_display_picture(gImage_pig);
-		// 	packet_length = 0;
-		// }
 
 		for(int countdown = 10; countdown >= 0; countdown--) {
 			ESP_LOGI(TAG, "%d... ", countdown);
@@ -724,10 +666,7 @@ void app_main()
 	wifi_connect();
 	TFT_setRotation(LANDSCAPE_FLIP);
 	lcd_display_picture(gImage_pig);
-	// TFT_fillWindow(TFT_BLACK);
-	// http_get_task();
 
 	xTaskCreate(http_get_task, "http_get_task", 8192, NULL, 11, NULL);
 }
-
 
